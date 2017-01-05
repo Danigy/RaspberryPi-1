@@ -1,1 +1,63 @@
-{	"bridge": {		"name": "Test",		"username": "CC:22:3D:E3:CE:33",		"port": 51826,		"pin": "031-45-154"	},	"description": "This is an example configuration file with one fake accessory and one fake platform. You can use this as a template for creating your own configuration file containing devices you actually own.",	"accessories": [{		"accessory": "PiTemperature",		"name": "Raspberry PI Temperature"	}, {		"accessory": "PiTemperature",		"name": "CPU Temperatur"	}, {		"accessory": "WUNDERGROUND",		"name": "Station",		"device": "IBADHERS8",		"key": "eabef34831086e99",		"city": "pws:IBADHERS8"	}, {		"accessory": "Daylight",		"name": "Daylight Sensor",		"location": {			"lat": 50.877037,			"lng": 9.691209		}	}],	"platforms": [{		"platform": "websocket",		"name": "websocket",		"port": 4050	}, {		"platform": "IFTTT",		"name": "IFTTT",		"makerkey": "kg6PLDrSBNSeUIk_Uuk72rYPfPtMcj2Vc4JuuUqZXj2",		"accessories": [{			"name": "Maker",			"buttons": [{				"caption": "test",				"triggerOn": "T1-1On",				"triggerOff": "T1-1Off"			}, {				"caption": "A1-2",				"triggerOn": "T1-2On",				"triggerOff": "T1-2Off"			}, {				"caption": "A1-3",				"trigger": "T1-3"			}, {				"caption": "A1-4",				"trigger": "T1-4"			}]		}]	}]}
+{
+	"bridge": {
+		"name": "Test",
+		"username": "CC:22:3D:E3:CE:33",
+		"port": 51826,
+		"pin": "031-45-154"
+	},
+	"description": [{
+		"Author": "Michael Gries",
+		"Creation": "2016-12-25",
+		"Reason": "configuration file for homebridge"
+	}, {
+		"2016-12-25": "homebridge-pi plugin added",
+		"2016-12-26": "homebridge-http plugin added"
+	}],
+	"accessories": [{
+		"accessory": "PiTemperature",
+		"name": "Raspberry PI Temperature"
+	}, {
+		"accessory": "PiTemperature",
+		"name": "CPU Temperatur"
+	}, {
+		"accessory": "WUNDERGROUND",
+		"name": "Station",
+		"device": "IBADHERS8",
+		"key": "eabef34831086e99",
+		"city": "pws:IBADHERS8"
+	}, {
+		"accessory": "Daylight",
+		"name": "Daylight Sensor",
+		"location": {
+			"lat": 50.877037,
+			"lng": 9.691209
+		}
+	}],
+	"platforms": [{
+		"platform": "websocket",
+		"name": "websocket",
+		"port": 4050
+	}, {
+		"platform": "IFTTT",
+		"name": "IFTTT",
+		"makerkey": "kg6PLDrSBNSeUIk_Uuk72rYPfPtMcj2Vc4JuuUqZXj2",
+		"accessories": [{
+			"name": "Maker",
+			"buttons": [{
+				"caption": "Maker1",
+				"triggerOn": "test",
+				"triggerOff": "test-Off"
+			}, {
+				"caption": "A1-2",
+				"triggerOn": "T1-2On",
+				"triggerOff": "T1-2Off"
+			}, {
+				"caption": "A1-3",
+				"trigger": "T1-3"
+			}, {
+				"caption": "A1-4",
+				"trigger": "T1-4"
+			}]
+		}]
+	}]
+}
