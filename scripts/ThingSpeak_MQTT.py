@@ -74,17 +74,23 @@ if useSSLWebsockets:
 # Create the topic string
 topic = "channels/" + channelID + "/publish/" + apiKey
 
+def get_snr():
+    snr = check_output(["cat /proc/cpuinfo | grep Serial | cut -d' ' -f2"], shell=True)
+    return(snr)
+
+print("Serial No:", get_snr())
+
 def get_temp():
     temp = check_output(["vcgencmd","measure_temp"]).decode("UTF-8")
     return(findall("\d+\.\d+",temp)[0])
 
-print(get_temp())
+print("CPU temperature:", get_temp())
 
 def get_tasks():
     tasks = check_output(["top -bn1 | grep 'Tasks'"], shell=True)
     return(findall("\d+",tasks)[0])
 
-print(get_tasks())
+print("RPi3 current tasks:", get_tasks(), "\n")
 
 # Run a loop which calculates the system performance every
 #   20 seconds and published that to a ThingSpeak channel
