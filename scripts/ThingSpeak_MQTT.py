@@ -1,6 +1,9 @@
 # ThingSpeak Update Using MQTT
 # Copyright 2016, MathWorks, Inc
 
+# M. Gries
+# 2017-05-07
+
 # This is an example of publishing to multiple fields simultaneously.
 # Connections over standard TCP, websocket or SSL are possible by setting
 # the parameters below.
@@ -33,6 +36,9 @@ channelID = "265640"
 apiKey = "XV28FE37W2ZRUDHU"
 
 #  MQTT Connection Methods
+
+# Set intervall MQTT messages will be send
+tIntervall = 20
 
 # Set useUnsecuredTCP to True to use the default MQTT port of 1883
 # This type of unsecured MQTT connection uses the least amount of system resources.
@@ -92,22 +98,32 @@ def get_tasks():
 
 print("RPi3 current tasks:", get_tasks(), "\n")
 
+def get_rssi():
+    rssi = check_output(["iwconfig wlan0 | egrep 'Signal' | cut -d= -f3"], shell=True)
+    return(rssi)
+
+print("Signal level:", get_rssi(), "\n")
+
 # Run a loop which calculates the system performance every
-#   20 seconds and published that to a ThingSpeak channel
+#   tIntervall seconds and published that to a ThingSpeak channel
 #   using MQTT.
+
 print (strftime("%a, %d %b %Y %H:%M:%S starting loop ...", localtime()))
+
 while(True):
     
     # get the system performance data
-    cpuPercent = psutil.cpu_percent(interval=20)
+    cpuPercent = psutil.cpu_percent(interval = tIntervall)
     ramPercent = psutil.virtual_memory().percent
     msgTime = strftime("%H:%M:%S ", localtime())
     cpuTemp = get_temp()
     RPi3Tasks = get_tasks()
-    print (msgTime, "CPU =",cpuPercent,"   RAM =",ramPercent, "   Temp =",cpuTemp, "   Tasks =",RPi3Tasks)
+    rssiStr = get_rssi()
+    RPi3rssi = "-" + str(findall("\d+",rssiStr)[0])
+    print (msgTime, "CPU =",cpuPercent,"   RAM =",ramPercent, "   Temp =",cpuTemp, "   Tasks =",RPi3Tasks, "   RSSI =",RPi3rssi)
 
     # build the payload string
-    tPayload = "field1=" + str(cpuPercent) + "&field2=" + str(ramPercent) + "&field3=" + str(cpuTemp)+ "&field4=" + str(RPi3Tasks)
+    tPayload = "field1=" + str(cpuPercent) + "&field2=" + str(ramPercent) + "&field3=" + str(cpuTemp)+ "&field4=" + str(RPi3Tasks) + "&field5=" + str(RPi3rssi)
 
     # attempt to publish this data to the topic 
     try:
