@@ -1,8 +1,9 @@
 # ThingSpeak Update Using MQTT
 # Copyright 2016, MathWorks, Inc
 
-# M. Gries
-# 2017-05-07
+# Modified by: M. Gries
+# Created 1st: 2017-04-29
+# Last Change: 2017-05-07
 
 # This is an example of publishing to multiple fields simultaneously.
 # Connections over standard TCP, websocket or SSL are possible by setting
@@ -81,24 +82,28 @@ if useSSLWebsockets:
 topic = "channels/" + channelID + "/publish/" + apiKey
 
 def get_snr():
+    # example line: Serial		: 0000000084d82aad
     snr = check_output(["cat /proc/cpuinfo | grep Serial | cut -d' ' -f2"], shell=True)
     return(snr)
 
 print("Serial No:", get_snr())
 
 def get_temp():
+    # example line: temp=56.4'C
     temp = check_output(["vcgencmd","measure_temp"]).decode("UTF-8")
     return(findall("\d+\.\d+",temp)[0])
 
 print("CPU temperature:", get_temp())
 
 def get_tasks():
+    # example line: Tasks: 173 total,   1 running, 171 sleeping,   1 stopped,   0 zombie
     tasks = check_output(["top -bn1 | grep 'Tasks'"], shell=True)
     return(findall("\d+",tasks)[0])
 
 print("RPi3 current tasks:", get_tasks(), "\n")
 
 def get_rssi():
+    # example line: -55 dBm 
     rssi = check_output(["iwconfig wlan0 | egrep 'Signal' | cut -d= -f3"], shell=True)
     return(rssi)
 
@@ -120,10 +125,19 @@ while(True):
     RPi3Tasks = get_tasks()
     rssiStr = get_rssi()
     RPi3rssi = "-" + str(findall("\d+",rssiStr)[0])
-    print (msgTime, "CPU =",cpuPercent,"   RAM =",ramPercent, "   Temp =",cpuTemp, "   Tasks =",RPi3Tasks, "   RSSI =",RPi3rssi)
+    print (msgTime, \
+           "  CPU =",cpuPercent, \
+           "  RAM =",ramPercent, \
+           "  Temp =",cpuTemp, \
+           "  Tasks =",RPi3Tasks, \
+           "  RSSI =",RPi3rssi)
 
     # build the payload string
-    tPayload = "field1=" + str(cpuPercent) + "&field2=" + str(ramPercent) + "&field3=" + str(cpuTemp)+ "&field4=" + str(RPi3Tasks) + "&field5=" + str(RPi3rssi)
+    tPayload = "field1=" + str(cpuPercent) + \
+               "&field2=" + str(ramPercent) + \
+               "&field3=" + str(cpuTemp) + \
+               "&field4=" + str(RPi3Tasks) + \
+               "&field5=" + str(RPi3rssi)
 
     # attempt to publish this data to the topic 
     try:
