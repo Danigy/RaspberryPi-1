@@ -17,4 +17,8 @@ if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 fi
 
+# https://www.raspberrypi.org/documentation/linux/usage/rc-local.md 
+python /home/pi/Public/ThingSpeak_MQTT.py &
+
 exit 0
+
